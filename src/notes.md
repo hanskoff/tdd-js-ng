@@ -10,4 +10,16 @@ Notes
  * using scopes avoids name collisions
 
 # Controllers
- * testing by
+ * tested by interactions with $scope
+
+# Modules
+ * grouping DI components
+
+# Promise API
+
+
+# Useful materials
+ * http://blogs.msdn.com/b/ericlippert/archive/2003/09/17/53038.aspx
+ * http://martinfowler.com/articles/mocksArentStubs.html
+ * https://gist.github.com/domenic/3889970 => http://domenic.me/2012/10/14/youre-missing-the-point-of-promises/
+ * http://docs.scala-lang.org/overviews/core/futures.html

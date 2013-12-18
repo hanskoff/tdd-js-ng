@@ -34,9 +34,40 @@ describe('users controller', function () {
   });
 
   it('should dirty check and allow clearing user edits', function () {
+    // given
+    $scope.user = {
+      name: 'Pawel'
+    };
+
+    //then
+    expect($scope.hasEdits()).toBeTruthy();
+  });
+
+  it('should clear current user after save', function () {
+    // given
+    $scope.user = {
+      name: 'Pawel'
+    };
+
+    // when
+    $scope.save();
+
+    // then
+    expect($scope.hasEdits()).toBeFalsy();
+
   });
 
   it('should remove a selected user', function () {
+    // given
+    $scope.users = [{
+      id: 1,
+      name: 'Pawel'
+    }];
+    // when
+    $scope.remove(1);
+
+    // then
+    expect($scope.users.length).toBe(0);
   });
 
   it('should support editing users', function () {

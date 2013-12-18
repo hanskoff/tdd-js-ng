@@ -11,10 +11,11 @@ var UserStorage = function () {
     };
 
     this.remove = function (userId) {
+        delete users[userId];
     };
 
     this.getById = function (userId) {
-        return users[userId];
+        return users[userId] || null;
     };
 
     this.getAll = function () {

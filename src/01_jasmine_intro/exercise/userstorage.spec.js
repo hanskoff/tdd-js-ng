@@ -20,8 +20,8 @@ describe('User storage as a global constructor function', function () {
 
     it('should allow querying all users', function () {
         // given:
-        ['Pawel', 'Jan'].forEach(function(username){
-            userStorage.save({
+        var savedUsers = ['Pawel', 'Jan'].map(function(username){
+            return userStorage.save({
                 name: username
             });
         });
@@ -31,10 +31,26 @@ describe('User storage as a global constructor function', function () {
 
         // then:
         expect(allUsers.length).toEqual(2);
+        expect(allUsers).toContain(savedUsers[0]);
+        expect(allUsers).toContain(savedUsers[1]);
     });
 
     it('should support removing users by id', function () {
+        // given:
+        var savedUsers = ['Pawel', 'Jan'].map(function(username){
+            return userStorage.save({
+                name: username
+            });
+        });
 
+        // when:
+        userStorage.remove(savedUsers[1].id);
+
+        // then:
+        var all = userStorage.getAll()
+        expect(all.length).toEqual(1);
+        expect(all).not.toContain(savedUsers[1]);
+        expect(all).toContain(savedUsers[0]);
     });
 
 
@@ -43,6 +59,14 @@ describe('User storage as a global constructor function', function () {
   describe('corner cases', function () {
 
     it('should return null for non existing users', function () {
+        // given:
+
+        // when
+        var fetched = userStorage.getById('foo');
+
+        // then
+        expect(fetched).toBe(null);
+
     });
 
   });

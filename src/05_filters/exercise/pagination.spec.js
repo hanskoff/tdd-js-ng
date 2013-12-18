@@ -23,5 +23,26 @@ describe('pagination filter', function () {
     expect(result).toEqual(['a','b']);
   });
 
+  it('should respect page number', function(){
+    //when
+    var result = paginationFilter(['a','b','c'],1,2);
+    //then
+    expect(result).toEqual(['c']);
+  });
+
+  it('should respect page number', function(){
+    //when
+    var result = paginationFilter(['a','b','c'],3,2);
+    //then
+    expect(result).toEqual([]);
+  });
+
+  it('should return tailing pages', function(){
+    //when
+    var result = paginationFilter(['a','b','c'], -1, 2);
+    //then
+    expect(result).toEqual(['a', 'b']);
+  });
+
 
 });

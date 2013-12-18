@@ -61,6 +61,18 @@ describe('Async user storage', function () {
         });
 
         it('should support removing users by id', function () {
+            // given
+            userStorage.save({id: 1, name: 'foo'});
+            userStorage.save({id: 2, name: 'bar'});
+            $scope.$digest();
+
+            // when:
+            var deleted = promiseValue(userStorage.remove(1));
+            var remainingUsers = promiseValue(userStorage.getAll());
+
+            // then
+            expect(deleted.id).toEqual(1);
+            expect(remainingUsers.length).toEqual(1);
         });
 
     });
@@ -68,6 +80,11 @@ describe('Async user storage', function () {
     describe('corner cases', function () {
 
         it('should return null for non existing users', function () {
+            // when
+            var nonExistingUser = promiseValue(userStorage.getById(1000500));
+
+            //then
+            expect(nonExistingUser).toBeNull();
         });
 
     });

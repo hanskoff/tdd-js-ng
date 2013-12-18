@@ -1,21 +1,21 @@
 //slide:start:ctrl;
 angular.module('users', ['userstorage'])
 
-    .controller('UsersCtrl', function ($scope, userStorage) {
+    .controller('UsersCtrl', function ($scope, UserStorage) {
 
         $scope.cleanUser = {};
-        $scope.users = userStorage.getAll();
+        $scope.users = UserStorage.getAll();
 
         $scope.save = function () {
-            userStorage.save($scope.user);
+            UserStorage.save($scope.user);
             $scope.cleanUser = {};
             $scope.clear();
-            $scope.users = userStorage.getAll();
+            $scope.users = UserStorage.getAll();
         };
 
         $scope.remove = function (userId) {
-            userStorage.remove(userId);
-            $scope.users = userStorage.getAll();
+            UserStorage.remove(userId);
+            $scope.users = UserStorage.getAll();
         };
 
         $scope.edit = function (user) {

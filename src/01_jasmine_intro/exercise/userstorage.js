@@ -1,20 +1,29 @@
-var UserStorage = function() {
+var UserStorage = function () {
 
-  var sequence = 1;
+    var sequence = 1;
 
-  var users = {};
+    var users = {};
 
-  this.save = function(user) {
-  };
+    this.save = function (user) {
+        users[sequence] = user;
+        user.id = sequence++;
+        return user;
+    };
 
-  this.remove = function(userId) {
-  };
+    this.remove = function (userId) {
+    };
 
-  this.getById = function(userId) {
-  };
+    this.getById = function (userId) {
+        return users[userId];
+    };
 
-  this.getAll = function() {
-  };
+    this.getAll = function () {
+        var result = [];
+        for (var key in users) if (users.hasOwnProperty(key)) {
+            result.push(users[key]);
+        }
+        return result;
+    };
 
 };
 

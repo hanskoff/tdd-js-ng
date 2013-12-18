@@ -19,7 +19,18 @@ describe('User storage as a global constructor function', function () {
     // slide:end
 
     it('should allow querying all users', function () {
+        // given:
+        ['Pawel', 'Jan'].forEach(function(username){
+            userStorage.save({
+                name: username
+            });
+        });
 
+        // when:
+        var allUsers = userStorage.getAll();
+
+        // then:
+        expect(allUsers.length).toEqual(2);
     });
 
     it('should support removing users by id', function () {

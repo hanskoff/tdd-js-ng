@@ -71,6 +71,15 @@ describe('users controller', function () {
   });
 
   it('should support editing users', function () {
+      // given
+      var user = { id: 1, name: "Marian"};
+
+      // when
+      $scope.edit(user)
+
+      // then
+      expect($scope.user).toEqual(user);
+      expect($scope.cleanUser).toEqual(user);
   });
 
 });

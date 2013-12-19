@@ -45,34 +45,68 @@ describe('pagination', function () {
   describe('model to UI', function () {
 
     it('should render pagination based on model, collection size and page size', function () {
-
+      // given:
       $scope.myPage = 2;
-      var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="5" items-per-page="2"></bs-pagination>', $scope);
-      expect(elm).toHavePageStates([0, 0, 1, 0, 0]);
+      // when:
+        var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="5" items-per-page="2"></bs-pagination>', $scope);
+      // then:
+        expect(elm).toHavePageStates([0, 0, 1, 0, 0]);
+    });
 
-      $scope.$apply(function(){
-        $scope.myPage = 0;
+
+      it('should re-render pages in response to collection size change', function () {
+          // given:
+          $scope.myPage = 2;
+          $scope.collectionSize = 5;
+          var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="collectionSize" items-per-page="2"></bs-pagination>', $scope);
+
+          // when:
+          $scope.$apply(function () {
+              $scope.collectionSize = 10;
+          });
+
+          // then:
+          expect(elm).toHavePageStates([0, 0, 1, 0, 0, 0, 0]);
       });
-      expect(elm).toHavePageStates([-1, 1, 0, 0, 0]);
-    });
-
-
-    it('should re-render pages in response to collection size change', function () {
-    });
 
 
     it('should re-render pages in response to selected page change', function () {
+        // given:
+        $scope.myPage = 2;
+        $scope.collectionSize = 10;
+        var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="collectionSize" items-per-page="2"></bs-pagination>', $scope);
+
+        // when:
+        $scope.$apply(function () {
+            $scope.myPage = 5;
+        });
+
+        // then:
+        expect(elm).toHavePageStates([0, 0, 0, 0, 0, 1, -1]);
     });
 
 
     it('should correct selected page to be within available pages range', function () {
+        // given:
+        $scope.myPage = 2;
+        $scope.collectionSize = 10;
+        var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="collectionSize" items-per-page="2"></bs-pagination>', $scope);
+
+        // when:
+        $scope.$apply(function () {
+            $scope.myPage = 9;
+        });
+
+        // then:
+        expect(elm).toHavePageStates([0, 0, 0, 0, 0, 1, -1]);
+        expect($scope.myPage).toEqual(5);
     });
   });
 
 
   describe('Ui to model', function () {
 
-    it('should update selected page on page no click', function () {
+    it('should update selected page on page number click', function () {
 
       $scope.myPage = 4;
       $scope.myCollectionLen = 50;
@@ -84,7 +118,27 @@ describe('pagination', function () {
     });
 
 
-    it('should update selected page on page arrow clicks', function () {
+    it('should update selected page upon left arrow click', function () {
+        // given:
+        $scope.myPage = 4;
+        $scope.myCollectionLen = 50;
+        var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="myCollectionLen"></bs-pagination>', $scope);
+
+        // when:
+        elm.find('li > a').first().click();
+        expect($scope.myPage).toBe(3);
     });
+
+      it('should update selected page upon right arrow click', function () {
+          // given:
+          $scope.myPage = 4;
+          $scope.myCollectionLen = 50;
+          var elm = compileElement('<bs-pagination selected-page="myPage" collection-size="myCollectionLen"></bs-pagination>', $scope);
+
+          // when:
+          elm.find('li > a').last().click();
+          expect($scope.myPage).toBe(5);
+      });
+
   });
 });

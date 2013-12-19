@@ -40,7 +40,19 @@ describe('Async user storage', function () {
   describe('basic CRUD operations', function () {
 
     it('should support adding new users', function () {
+      // given:
+      $httpBackend.expectPOST(withUrl('')).respond(testUser);
 
+      // when:
+      var savedUser;
+      userStorage.save(testUser).then(function (response) {
+        savedUser = response;
+      });
+
+      $httpBackend.flush();
+
+      // then:
+      expect(savedUser).toEqual(testUser);
     });
 
     it('should update an existing user when save called on a user with a defined id', function () {

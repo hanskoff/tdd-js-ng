@@ -14,6 +14,11 @@ angular.module('userstorageHttp', [])
     var UserStorage = {};
 
     UserStorage.save = function (user) {
+      return $http.post(BASE_URL, user, {params: {
+        apiKey: API_KEY
+      }}).then(function(response) {
+        return response.data;
+      });
     };
 
     UserStorage.remove = function (userId) {

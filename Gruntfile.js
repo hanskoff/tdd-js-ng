@@ -19,7 +19,7 @@ module.exports = function (grunt) {
           'lib/moment.js',
           'lib/angular-mocks.js',
           'lib/jasmine-matchers.js',
-          'src/07*/ex*/*.js',
+          'src/08*/ex*/*.js',
           'src/**/*.html'
         ],
         exclude: [

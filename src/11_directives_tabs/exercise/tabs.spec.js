@@ -31,12 +31,58 @@ describe('tabs', function () {
     });
 
     it('should remove existing tab', function () {
+      //given
+      var t1 = {};
+      tabsCtrl.addTab(t1);
+      //when
+      tabsCtrl.removeTab(t1);
+      //then
+      expect($scope.tabs.length).toEqual(0);
     });
 
     it('should select an active tab based on valid index', function () {
+      //given
+      var t1 = {};
+      var t2 = {isActive: true};
+
+      tabsCtrl.addTab(t1);
+      tabsCtrl.addTab(t2);
+      //when
+      $scope.selectActiveTab(0);
+
+      //then
+      expect(t1.isActive).toBeTruthy();
+      expect(t2.isActive).toBeFalsy();
     });
 
     it('should ignore selections with invalid index', function () {
+      //given
+      var t1 = {};
+      var t2 = {isActive: true};
+
+      tabsCtrl.addTab(t1);
+      tabsCtrl.addTab(t2);
+      //when
+      $scope.selectActiveTab(2);
+
+      //then
+      expect(t1.isActive).toBeFalsy();
+      expect(t2.isActive).toBeTruthy();
+    });
+
+    it('should ignore selections with invalid lower index', function () {
+      //given
+      var t1 = {};
+      var t2 = {isActive: true};
+
+      tabsCtrl.addTab(t1);
+      tabsCtrl.addTab(t2);
+      //when
+      $scope.selectActiveTab(-1);
+
+      //then
+      expect(t1.isActive).toBeFalsy();
+      expect(t2.isActive).toBeTruthy();
     });
 
   });
@@ -55,7 +101,7 @@ describe('tabs', function () {
         '<bs-tabs>' +
           '<bs-tab heading="foo">foo content</bs-tab>' +
           '<bs-tab heading="{{\'bar\'}}">bar content</bs-tab>' +
-        '</bs-tabs>', $scope);
+          '</bs-tabs>', $scope);
 
       var headings = elm.find('ul.nav-tabs > li');
       var body = elm.find('div.tab-content > div.tab-pane');
@@ -72,6 +118,21 @@ describe('tabs', function () {
     });
 
     it('should switch active tab on heading click', function () {
+      var elm = compileElement(
+        '<bs-tabs>' +
+          '<bs-tab heading="foo">foo content</bs-tab>' +
+          '<bs-tab heading="{{\'bar\'}}">bar content</bs-tab>' +
+          '</bs-tabs>', $scope);
+
+      var headings = elm.find('ul.nav-tabs > li');
+      var body = elm.find('div.tab-content > div.tab-pane');
+
+      //when
+      headings.eq(1).find('a').click();
+
+      //then
+      expect(headings.eq(1)).toHaveClass('active');
+      expect(body.eq(1)).toHaveClass('active');
     });
 
   });

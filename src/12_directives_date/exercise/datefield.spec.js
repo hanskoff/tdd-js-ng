@@ -34,9 +34,29 @@ describe('datefield', function () {
     });
 
     it('should format a valid date with a specified format (YYYY-MM-DD)', function () {
+        // given:
+        $scope.model = new Date(0);
+
+        // when:
+        var elm = compileElement('<form name="f"><input name="i" ng-model="model" bs-datefield="YYYY-MM-DD"></form>', $scope);
+
+        // then:
+        expect(elm.find('input').val()).toEqual('1970-01-01');
+        expect($scope.f.i.$valid).toBeTruthy();
     });
 
     it('should leave an input field blank and mark a field as invalid for invalid date', function () {
+        // given:
+        $scope.model = "zła data";
+
+        // when:
+        var elm = compileElement(
+            '<form name="f"><input name="i" ng-model="model" bs-datefield="YYYY-MM-DD"></form>',
+            $scope);
+
+        // then:
+        expect(elm.find('input').val()).toEqual('');
+        expect($scope.f.i.$valid).toBeFalsy();
     });
 
   });
@@ -54,9 +74,31 @@ describe('datefield', function () {
     });
 
     it('should correctly parse date in the specified format', function () {
+        // given:
+        var date = '12-31-2013';
+        var elm = compileElement('<form name="f"><input name="i" ng-model="model" bs-datefield="MM-DD-YYYY"></form>', $scope);
+
+        // when:
+        changeInputValueTo(elm, date);
+
+        // then:
+        expect($scope.model.getFullYear()).toEqual(2013);
+        expect($scope.model.getMonth()).toEqual(11);
+        expect($scope.model.getDate()).toEqual(31);
+        expect($scope.f.i.$valid).toBeTruthy();
     });
 
     it('should bind undefined to the model and mark a field as invalid if parsing fails', function () {
+        // given:
+        var date = 'zła data';
+        var elm = compileElement('<form name="f"><input name="i" ng-model="model" bs-datefield="MM-DD-YYYY"></form>', $scope);
+
+        // when:
+        changeInputValueTo(elm, date);
+
+        // then:
+        expect($scope.model).toBeUndefined();
+        expect($scope.f.i.$valid).toBeFalsy();
     });
 
   });

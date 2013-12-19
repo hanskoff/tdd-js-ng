@@ -17,7 +17,7 @@ describe('Async user storage', function () {
 
   // we want to have strict control over back-end interactions here
   // slide:start:strict;
-  afterEach(function() {
+  afterEach(function () {
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
   });
@@ -40,6 +40,7 @@ describe('Async user storage', function () {
   describe('basic CRUD operations', function () {
 
     it('should support adding new users', function () {
+      var testUser = {name: 'Pawel'};
       // given:
       $httpBackend.expectPOST(withUrl('')).respond(testUser);
 
@@ -56,6 +57,20 @@ describe('Async user storage', function () {
     });
 
     it('should update an existing user when save called on a user with a defined id', function () {
+      //given
+      $httpBackend.expectPUT(withUrl('/123')).respond(testUser);
+      testUser.secondName = "Franek";
+
+      // when:
+      var savedUser;
+      userStorage.save(testUser).then(function (response) {
+        savedUser = response;
+      });
+
+      $httpBackend.flush();
+
+      // then:
+      expect(savedUser).toEqual(testUser)
 
     });
 
@@ -64,19 +79,33 @@ describe('Async user storage', function () {
 
       $httpBackend.expectGET(withUrl('/123')).respond(testUser);
 
-      userStorage.getById('123').then(function(userById) {
-          expect(userById._id.$oid).toEqual('123');
-        }, onFail);
+      userStorage.getById('123').then(function (userById) {
+        expect(userById._id.$oid).toEqual('123');
+      }, onFail);
 
       $httpBackend.flush();
     });
     // slide:end;
 
     it('should allow querying all users', function () {
+      $httpBackend.expectGET(withUrl('')).respond([testUser]);
+
+      userStorage.getAll().then(function (response) {
+        expect(response).toEqual([testUser]);
+      }, onFail);
+
+      $httpBackend.flush();
 
     });
 
     it('should support removing users by id', function () {
+      $httpBackend.expectDELETE(withUrl('/123')).respond(testUser);
+
+      userStorage.remove('123').then(function (userById) {
+        expect(userById._id.$oid).toEqual('123');
+      }, onFail);
+
+      $httpBackend.flush();
     });
 
   });

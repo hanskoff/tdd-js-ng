@@ -14,27 +14,48 @@ angular.module('userstorageHttp', [])
     var UserStorage = {};
 
     UserStorage.save = function (user) {
-      return $http.post(BASE_URL, user, {params: {
-        apiKey: API_KEY
-      }}).then(function(response) {
-        return response.data;
-      });
+      if (user._id) {
+        var userId = user._id.$oid;
+        var userCp = angular.copy(user);
+        delete userCp._id;
+        return $http.put(BASE_URL + '/' + userId, userCp, {params: {
+          apiKey: API_KEY
+        }}).then(function (response) {
+            return response.data;
+          });
+      } else {
+        return $http.post(BASE_URL, user, {params: {
+          apiKey: API_KEY
+        }}).then(function (response) {
+            return response.data;
+          });
+      }
     };
 
     UserStorage.remove = function (userId) {
+      return $http.delete(BASE_URL + '/' + userId, {params: {
+        apiKey: API_KEY
+      }}).then(function (response) {
+          return response.data;
+        });
     };
 
     // slide:start:api;
     UserStorage.getById = function (userId) {
       return $http.get(BASE_URL + '/' + userId, {params: {
         apiKey: API_KEY
-      }}).then(function(response) {
+      }}).then(function (response) {
           return response.data;
         });
     };
     // slide:end
 
     UserStorage.getAll = function () {
+      return $http.get(BASE_URL, {params: {
+        apiKey: API_KEY
+      }}).then(function (response) {
+          return response.data;
+        });
     };
 
     return UserStorage;
